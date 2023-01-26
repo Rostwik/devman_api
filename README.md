@@ -32,7 +32,7 @@ $pip install -r requirements.txt
 ```
 - run the program
 ```bash
-$python main.py"
+$python main.py
 ```
 
 ## License
