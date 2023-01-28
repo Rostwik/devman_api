@@ -32,20 +32,13 @@ def main():
     devman_api_token = os.getenv('DEVMAN_API_TOKEN')
     telegram_api_token = os.getenv('TELEGRAM_API_TOKEN')
     telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
-    results = {}
+    payload = {}
 
     while True:
         try:
             headers = {
                 'Authorization': f'Token {devman_api_token}'
             }
-            payload = {}
-
-            if results:
-                if results['status'] == 'found':
-                    payload['timestamp'] = results['last_attempt_timestamp']
-                if results['status'] == 'timeout':
-                    payload['timeout'] = results['timestamp_to_request']
 
             url = 'https://dvmn.org/api/long_polling/'
 
@@ -53,8 +46,13 @@ def main():
             response.raise_for_status()
             results = response.json()
 
-            for result in results['new_attempts']:
-                send_telegram_msg(telegram_chat_id, result, telegram_api_token)
+            if results:
+                if results['status'] == 'found':
+                    payload['timestamp'] = results['last_attempt_timestamp']
+                    for result in results['new_attempts']:
+                        send_telegram_msg(telegram_chat_id, result, telegram_api_token)
+                if results['status'] == 'timeout':
+                    payload['timeout'] = results['timestamp_to_request']
 
         except requests.exceptions.ReadTimeout:
             pass
