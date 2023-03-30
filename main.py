@@ -20,9 +20,7 @@ class TelegramLogsHandler(logging.Handler):
         self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
 
 
-def send_telegram_msg(chat_id, results, telegram_token):
-    bot = telegram.Bot(token=telegram_token)
-
+def send_telegram_msg(chat_id, results, telegram_bot):
     if results['is_negative']:
         text = f'''
                    У Вас проверили работу "{results['lesson_title']}".
@@ -36,7 +34,7 @@ def send_telegram_msg(chat_id, results, telegram_token):
                    Преподавателю все понравилось, можно приступать к следующему уроку.
                    '''
 
-    bot.send_message(chat_id=chat_id, text=textwrap.dedent(text))
+    telegram_bot.send_message(chat_id=chat_id, text=textwrap.dedent(text))
 
 
 def main():
@@ -47,11 +45,12 @@ def main():
     payload = {}
 
     bot = telegram.Bot(token=telegram_api_token)
+
     logging.basicConfig(format="%(process)d %(levelname)s %(message)s")
     logger = logging.getLogger('database')
     logger.setLevel(logging.WARNING)
     logger.addHandler(TelegramLogsHandler(bot, telegram_chat_id))
-    logger.warning('Оппапа!')
+    logger.info('Бот запущен.')
 
     while True:
         try:
@@ -69,7 +68,7 @@ def main():
                 if results['status'] == 'found':
                     payload['timestamp'] = results['last_attempt_timestamp']
                     for result in results['new_attempts']:
-                        send_telegram_msg(telegram_chat_id, result, telegram_api_token)
+                        send_telegram_msg(telegram_chat_id, result, bot)
                 if results['status'] == 'timeout':
                     payload['timeout'] = results['timestamp_to_request']
 
@@ -78,6 +77,8 @@ def main():
         except requests.exceptions.ConnectionError:
             print('Интернет исчез')
             time.sleep(5)
+        except Exception as err:
+            logger.error(f'Бот упал с ошибкой: {err}', exc_info=True)
 
 
 if __name__ == '__main__':
