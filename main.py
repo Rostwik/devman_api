@@ -4,6 +4,7 @@ import textwrap
 
 import requests
 import telegram
+import logging
 from dotenv import load_dotenv
 
 
@@ -33,6 +34,8 @@ def main():
     telegram_api_token = os.getenv('TELEGRAM_API_TOKEN')
     telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
     payload = {}
+
+    logging.warning('Предупреждение, что-то могло сломаться')
 
     while True:
         try:
