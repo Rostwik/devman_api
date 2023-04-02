@@ -7,6 +7,8 @@ import telegram
 import logging
 from dotenv import load_dotenv
 
+logger = logging.getLogger('works_checker')
+
 
 class TelegramLogsHandler(logging.Handler):
 
@@ -47,7 +49,6 @@ def main():
     bot = telegram.Bot(token=telegram_api_token)
 
     logging.basicConfig(format="%(process)d %(levelname)s %(message)s")
-    logger = logging.getLogger('database')
     logger.setLevel(logging.WARNING)
     logger.addHandler(TelegramLogsHandler(bot, telegram_chat_id))
     logger.info('Бот запущен.')
