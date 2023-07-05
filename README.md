@@ -46,7 +46,7 @@ $ git clone https://github.com/Rostwik/devman_api.git
 ```bash
 $ docker build -t devman_api .
 ```
-- Start a container specifying the necessary environment variables from the [Environment](#environment) section with the '-e' flag:
+- Start a container specifying the necessary environment variables from the [Environment](#enviroments) section with the '-e' flag:
 ```bash
 $ docker run -e DEVMAN_API_TOKEN='' -e TELEGRAM_API_TOKEN='' -e TELEGRAM_CHAT_ID='' devman_api
 ```
