@@ -22,17 +22,33 @@ To get started go to terminal(mac os) or CMD (Windows)
 - clone github repository or download the code
 
 ```bash
-$git clone https://github.com/Rostwik/devman_api.git
+$ git clone https://github.com/Rostwik/devman_api.git
 ```
 
 - install packages
 
 ```bash
-$pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 - run the program
 ```bash
-$python main.py
+$ python main.py
+```
+
+## Dockerization
+
+- Clone repository:
+```bash
+$ git clone https://github.com/Rostwik/devman_api.git
+```
+- [Download and install Docker](https://docs.docker.com/get-docker/)
+- Build the container image:
+```bash
+$ docker build -t devman_api .
+```
+- Start a container specifying the necessary environment variables from the [Environment](#environment) section with the '-e' flag:
+```bash
+$ docker run -e DEVMAN_API_TOKEN='' -e TELEGRAM_API_TOKEN='' -e TELEGRAM_CHAT_ID='' devman_api
 ```
 
 ## License
